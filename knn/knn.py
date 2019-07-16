@@ -10,7 +10,12 @@ from window import window
 
 # TODO 正规化数据
 def calc_eucl(x, y):
-    return sqrt(np.sum([(xx - yy) ** 2 for xx, yy in zip(x, y)]))
+    dis = []
+    for i in range(len(x)):
+        # print(len(x[i]), len(y[i]))
+        # print(len([(xx - yy) ** 2 for xx, yy in zip(x[i], y[i])]))
+        dis.append(sqrt(np.sum([(xx - yy) ** 2 for xx, yy in zip(x[i], y[i])])))
+    return dis
 
 
 # TODO 其他的距离计算方式
@@ -18,12 +23,12 @@ def calc_eucl(x, y):
 
 # TODO 不同的k
 # kNN
-def knn(teachers, tests, cal_dis, k=3):
+def knn(teachers, test, cal_dis, k=3):
     # 记录各种行为在周围k个元素中出现了几次
     result = {}
-    tmp = [[cal_dis(teacher[:-1], test[:-1]), teacher[-1]] for test in tests for teacher in teachers]
+    tmp = [[cal_dis(teacher[:-1], test), teacher[-1]] for teacher in teachers]
     # 排序选出最近的k个元素
-    for kth in sorted(tmp, key=lambda x: x[0])[:k]:
+    for kth in sorted(tmp, key=lambda x: np.sum([xx**2 for xx in x[0]]))[:k]:
         # print(kth)
         result[kth[1]] = 1 if kth[1] not in result else result[kth[1]] + 1
     # print()

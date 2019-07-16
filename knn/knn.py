@@ -5,10 +5,9 @@ from math import *
 from functools import reduce
 
 sys.path.append('../window')
-from window import window
+import window
 
 
-# TODO 正规化数据
 def calc_eucl(x, y):
     dis = []
     for i in range(len(x)):
@@ -43,17 +42,18 @@ def is_equal(ans, pre):
 
 if __name__ == "__main__":
     # TODO 数据去噪
+    # 用于normalize
+    ave, std = window.normalize()
     # 训练集
     teacher = []
     for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
         print(i)
-        teacher.extend([d for d in window("../data/teacher/" + str(i) + "oo.csv", i)])
-
+        teacher.extend([d for d in window.cal_window("../data/teacher/" + str(i) + "oo.csv", i, ave, std)])
     # 测试集
     test = []
     for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
         print(i)
-        test.extend([d for d in window("../data/test/" + str(i) + "test.csv", i)])
+        test.extend([d for d in window.cal_window("../data/test/" + str(i) + "test.csv", i, ave, std)])
     # print(test)
     # TODO 混淆矩阵
     # 测试结果

@@ -44,7 +44,7 @@ def normalize():
     # print(teachers)
     ave = list(np.average(np.array(teachers), axis=0))
     std = list(np.std(np.array(teachers), axis=0))
-    print(ave, std)
+    # print(ave, std)
     return ave, std
 
 

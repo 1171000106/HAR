@@ -27,7 +27,7 @@ def knn(teachers, test, cal_dis, k=3):
     result = {}
     tmp = [[cal_dis(teacher[:-1], test), teacher[-1]] for teacher in teachers]
     # 排序选出最近的k个元素
-    for kth in sorted(tmp, key=lambda x: np.sum([xx**2 for xx in x[0]]))[:k]:
+    for kth in sorted(tmp, key=lambda x: np.sum([xx ** 2 for xx in x[0]]))[:k]:
         # print(kth)
         result[kth[1]] = 1 if kth[1] not in result else result[kth[1]] + 1
     # print()
@@ -41,23 +41,32 @@ def is_equal(ans, pre):
 
 
 if __name__ == "__main__":
+    data = [1, 2, 3, 4, 5, 6, 8, 10, 11]
     # TODO 数据去噪
     # 用于normalize
     ave, std = window.normalize()
     # 训练集
     teacher = []
-    for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
-        print(i)
+    for i in data:
+        print('正在读入第' + str(i) + '个训练集')
         teacher.extend([d for d in window.cal_window("../data/teacher/" + str(i) + "oo.csv", i, ave, std)])
+    # print(len(teacher))
     # 测试集
     test = []
-    for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
-        print(i)
+    for i in data:
+        print('正在读入第' + str(i) + '个测试集')
         test.extend([d for d in window.cal_window("../data/test/" + str(i) + "test.csv", i, ave, std)])
+    # print(len(test))
     # print(test)
-    # TODO 混淆矩阵
-    # 测试结果
+    print('正在测试中...')
     cor = reduce(lambda a, b: a + b, [is_equal(i[-1], knn(teacher, i[:-1], calc_eucl)) for i in test])
-    # TODO 其他表征结果的参数
+    ans = [[0] * 15 for i in range(15)]
+    for i in range(len(test)):
+        ans[test[i][-1]][knn(teacher, test[i][:-1], calc_eucl)] += 1
+    print('Practice\\Forecast:')
+    for i in data:
+        for j in data:
+            print('%3d' % ans[i][j], end=' ')
+        print()
     # 输出各种结果
     print("Accuracy : " + str(cor / len(test) * 100) + " %")

@@ -5,12 +5,12 @@ from math import *
 from functools import reduce
 
 sys.path.append('../window')
-from window import window
+import window
 
 
 # TODO 正规化数据
 def calc_eucl(x, y):
-    return sqrt(np.sum([(xx - yy) ** 2 for xx, yy in zip(x, y)]))
+    return sqrt(np.sum([((xx - a) / s - (yy - a) / s) ** 2 for xx, yy, a, s in zip(x, y, ave, std)]))
 
 
 # TODO 其他的距离计算方式
@@ -18,7 +18,7 @@ def calc_eucl(x, y):
 
 # TODO 不同的k
 # kNN
-def knn(teachers, tests, cal_dis, k=3):
+def knn(teachers, tests, cal_dis, k=20):
     # 记录各种行为在周围k个元素中出现了几次
     result = {}
     tmp = [[cal_dis(teacher[:-1], test[:-1]), teacher[-1]] for test in tests for teacher in teachers]
@@ -42,13 +42,13 @@ if __name__ == "__main__":
     teacher = []
     for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
         print(i)
-        teacher.extend([d for d in window("../data/teacher/" + str(i) + "oo.csv", i)])
-
+        teacher.extend([d for d in window.cal_window("../data/teacher/" + str(i) + "oo.csv", i)])
+    ave, std = window.normalize()
     # 测试集
     test = []
     for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
         print(i)
-        test.extend([d for d in window("../data/test/" + str(i) + "test.csv", i)])
+        test.extend([d for d in window.cal_window("../data/test/" + str(i) + "test.csv", i)])
     # print(test)
     # TODO 混淆矩阵
     # 测试结果

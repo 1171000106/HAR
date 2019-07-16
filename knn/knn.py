@@ -3,7 +3,6 @@ import sys
 import numpy as np
 from math import *
 from functools import reduce
-
 sys.path.append('../window')
 import window
 
@@ -18,7 +17,11 @@ def calc_eucl(x, y):
 
 
 # TODO 其他的距离计算方式
-
+def calc_io(x, y):
+    dis = [];
+    for i in range(len(x)):
+        dis.append(np.sum([(xx - yy) for xx, yy in zip(x[i], y[i])]))
+    return dis;
 
 # TODO 不同的k
 # kNN
@@ -41,7 +44,7 @@ def is_equal(ans, pre):
 
 
 if __name__ == "__main__":
-    # TODO 数据去噪
+    ## TODO 数据去噪
     # 用于normalize
     ave, std = window.normalize()
     # 训练集

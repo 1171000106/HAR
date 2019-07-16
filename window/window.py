@@ -6,7 +6,7 @@ import numpy as np
 # 1-step/width是窗口重叠度
 # TODO 调整以上两项
 
-def cal_window(filename, type, ave, std, width=500, step=300):
+def cal_window(filename, type, ave, std, width=200, step=77):
     # 特征值(平均值，方差)(使用list储存各个传感器参数) + 实际的运动类型
     argvs = []
     # TODO 更多类型的特征值
@@ -24,8 +24,20 @@ def cal_window(filename, type, ave, std, width=500, step=300):
     # print(lines[0])
     for win in [lines[i:i + width] for i in range(0, len(lines) - 1, step)]:
         argv = []
-        argv.append(list(np.average(np.array(win), axis=0)))
-        argv.append(list(np.var(np.array(win), axis=0)))
+        # 数据去噪
+        Qa = [];
+        lw = len(win);
+        #print(win);
+        for i in range(0,lw-2):
+            ln = len(win[i]);
+            sv = win[i];
+            for j in range(0,ln):
+                sum = [win[i+1][j],win[i+2][j],win[i][j]];
+                sum.sort();
+                sv[j] = sum[1];
+            Qa.append(sv);
+        argv.append(list(np.average(np.array(Qa), axis=0)))
+        argv.append(list(np.var(np.array(Qa), axis=0)))
         argv.append(type)
         # print(argv)
         argvs.append(argv)

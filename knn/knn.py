@@ -10,7 +10,7 @@ import window
 
 # TODO 正规化数据
 def calc_eucl(x, y):
-    return sqrt(np.sum([((xx - a) / s - (yy - a) / s) ** 2 for xx, yy, a, s in zip(x, y, ave, std)]))
+    return sqrt(np.sum([((xx - x_) / s - (yy - x_) / s) ** 2 for xx, yy, x_, s in zip(x, y, ave, std)]))
 
 
 # TODO 其他的距离计算方式

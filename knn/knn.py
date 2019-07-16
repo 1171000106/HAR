@@ -8,9 +8,8 @@ sys.path.append('../window')
 import window
 
 
-# TODO 正规化数据
 def calc_eucl(x, y):
-    return sqrt(np.sum([((xx - x_) / s - (yy - x_) / s) ** 2 for xx, yy, x_, s in zip(x, y, ave, std)]))
+    return sqrt(np.sum([(xx - yy) ** 2 for xx, yy in zip(x, y)]))
 
 
 # TODO 其他的距离计算方式
@@ -38,17 +37,18 @@ def is_equal(ans, pre):
 
 if __name__ == "__main__":
     # TODO 数据去噪
+    # 用于normalize
+    ave, std = window.normalize()
     # 训练集
     teacher = []
     for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
         print(i)
-        teacher.extend([d for d in window.cal_window("../data/teacher/" + str(i) + "oo.csv", i)])
-    ave, std = window.normalize()
+        teacher.extend([d for d in window.cal_window("../data/teacher/" + str(i) + "oo.csv", i, ave, std)])
     # 测试集
     test = []
     for i in [1, 2, 3, 4, 5, 6, 8, 10, 11]:
         print(i)
-        test.extend([d for d in window.cal_window("../data/test/" + str(i) + "test.csv", i)])
+        test.extend([d for d in window.cal_window("../data/test/" + str(i) + "test.csv", i, ave, std)])
     # print(test)
     # TODO 混淆矩阵
     # 测试结果
